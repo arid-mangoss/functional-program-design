@@ -8,13 +8,13 @@ import scala.compiletime.ops.boolean
 
 abstract class QuickCheckHeap extends Properties("Heap") with IntHeap:
   lazy val genHeap: Gen[H] =
-    // oneOf(
-    // const(empty),
+    oneOf(
+    const(empty),
     for {
       n <- arbitrary[Int]
       h <- oneOf(const(empty), genHeap)
     } yield insert(n, h)
-  // )
+  )
 
   given Arbitrary[H] = Arbitrary(genHeap)
 
