@@ -9,12 +9,12 @@ import scala.compiletime.ops.boolean
 abstract class QuickCheckHeap extends Properties("Heap") with IntHeap:
   lazy val genHeap: Gen[H] =
     oneOf(
-    const(empty),
-    for {
-      n <- arbitrary[Int]
-      h <- oneOf(const(empty), genHeap)
-    } yield insert(n, h)
-  )
+      const(empty),
+      for {
+        n <- arbitrary[Int]
+        h <- oneOf(const(empty), genHeap)
+      } yield insert(n, h)
+    )
 
   given Arbitrary[H] = Arbitrary(genHeap)
 
@@ -49,19 +49,20 @@ abstract class QuickCheckHeap extends Properties("Heap") with IntHeap:
       if (min1 <= min2) then min1 == min3 else min2 == min3
   }
 
-  property("gen6") = forAll { (a: Int, b: Int) =>
-    val h = insert(b, insert(a, empty))
-    val minElement = if (a > b) b else a
-    val maxElement = if (a < b) b else a
-    val m1 = findMin(h)
-    val h2 = deleteMin(h)
-    val m2 = findMin(h2)
-    m1 == minElement && m2 == maxElement
-  }
-  property("gen7") = forAll { (a: Int, b: Int, c: Int) =>
+  property("gen6") = forAll { (a: Int, b: Int, c: Int) =>
     val h = insert(a, insert(b, insert(c, empty)))
-    val max = Math.max(a, Math.max(b, c))
-    findMin(deleteMin(deleteMin(h))) == max
+    val sorted = List(a, b, c).sorted
+
+    val m1 = findMin(h)
+    val h1 = deleteMin(h)
+
+    val m2 = findMin(h1)
+    val h2 = deleteMin(h1)
+
+    val m3 = findMin(h2)
+
+    m1 == sorted(0) && m2 == sorted(1) && m3 == sorted(2)
+
   }
 
   def isSorted(xs: List[Int]): Boolean = xs match {
