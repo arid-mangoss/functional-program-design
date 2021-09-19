@@ -6,7 +6,7 @@ package streams
   * When mixing in that component, a level can be defined by defining the field
   * `level` in the following form:
   *
-  * val level = """------
+  * val level = """ ------
   * |--ST--
   * |--oo--
   * |--oo--
@@ -33,7 +33,7 @@ trait StringParserTerrain extends GameDef:
     * `levelVector`. The vector contains parsed version of the `level` string.
     * For example, the following level
     *
-    * val level = """ST
+    * val level = """ ST
     * |oo
     * |oo""".stripMargin
     *
@@ -45,7 +45,24 @@ trait StringParserTerrain extends GameDef:
     * valid position (not a '-' character) inside the terrain described by
     * `levelVector`.
     */
-  def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean = ???
+  def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean =
+    (pos: Pos) =>
+      // println(s"vector: ${vector}, pos${pos}")
+      if (
+        pos.row >= 0 &&
+        levelVector.length > pos.row &&
+        pos.col >= 0 &&
+        levelVector(pos.row).length > pos.col &&
+        levelVector(pos.row)(pos.col) != '-'
+      ) then true
+      else false
+
+  // def terrainFunction(levelVector: Vector[Vector[Char]]): Pos => Boolean =
+  //   pos =>
+  //     if (pos.x < 0 || pos.y < 0) false
+  //     else if (pos.x >= levelVector.length) false
+  //     else if (pos.y >= levelVector(pos.x).length) false
+  //     else List('o', 'S', 'T') contains levelVector(pos.x)(pos.y)
 
   /** This function should return the position of character `c` in the terrain
     * described by `levelVector`. You can assume that the `c` appears exactly
@@ -54,7 +71,14 @@ trait StringParserTerrain extends GameDef:
     * Hint: you can use the functions `indexWhere` and / or `indexOf` of the
     * `Vector` class
     */
-  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos = ???
+  def findChar(c: Char, levelVector: Vector[Vector[Char]]): Pos =
+    def innerFind(c: Char, row: Int, levelVector: Vector[Vector[Char]]): Pos =
+      levelVector match
+        case h +: t =>
+          if h.indexOf(c) >= 0 then Pos(row, h.indexOf(c))
+          else innerFind(c, row + 1, t)
+        case _ => throw IllegalArgumentException("c not in levelVector")
+    innerFind(c, 0, levelVector)
 
   private lazy val vector: Vector[Vector[Char]] =
     Vector(level.split("\r?\n").map(str => Vector(str*)).toIndexedSeq*)

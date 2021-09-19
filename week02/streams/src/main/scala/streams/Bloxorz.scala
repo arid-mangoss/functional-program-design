@@ -39,3 +39,14 @@ object Bloxorz extends App:
         |------ooo-""".stripMargin
 
   println(Level1.solution)
+
+  object Level3 extends Level:
+    val level =
+      """
+        |------ooooooo--
+        |oooo--ooo--oo--
+        |ooooooooo--oooo
+        |oSoo-------ooTo
+        |oooo-------oooo
+        |------------ooo""".stripMargin
+  println(Level3.solution)
