@@ -84,24 +84,28 @@ trait GameDef:
     def deltaCol(d1: Int, d2: Int) = Block(b1.deltaCol(d1), b2.deltaCol(d2))
 
     /** The block obtained by moving left */
-    def left = if isStanding then deltaCol(-2, -1)
-    else if b1.row == b2.row then deltaCol(-1, -2)
-    else deltaCol(-1, -1)
+    def left = 
+      if isStanding then deltaCol(-2, -1)
+      else if b1.row == b2.row then deltaCol(-1, -2)
+      else deltaCol(-1, -1)
 
     /** The block obtained by moving right */
-    def right = if isStanding then deltaCol(1, 2)
-    else if b1.row == b2.row then deltaCol(2, 1)
-    else deltaCol(1, 1)
+    def right =
+      if isStanding then deltaCol(1, 2)
+      else if b1.row == b2.row then deltaCol(2, 1)
+      else deltaCol(1, 1)
 
     /** The block obtained by moving up */
-    def up = if isStanding then deltaRow(-2, -1)
-    else if b1.row == b2.row then deltaRow(-1, -1)
-    else deltaRow(-1, -2)
+    def up =
+      if isStanding then deltaRow(-2, -1)
+      else if b1.row == b2.row then deltaRow(-1, -1)
+      else deltaRow(-1, -2)
 
     /** The block obtained by moving down */
-    def down = if isStanding then deltaRow(1, 2)
-    else if b1.row == b2.row then deltaRow(1, 1)
-    else deltaRow(2, 1)
+    def down =
+      if isStanding then deltaRow(1, 2)
+      else if b1.row == b2.row then deltaRow(1, 1)
+      else deltaRow(2, 1)
 
     /** Returns the list of blocks that can be obtained by moving the current
       * block, together with the corresponding move.
