@@ -29,10 +29,10 @@ enum Json:
     * Note that you have to explicitly fix `A` type parameter when you call the
     * method:
     *
-    * {{{
-    *   someJsonValue.decodeAs[User] // OK
-    *   someJsonValue.decodeAs       // Wrong!
-    * }}}
+    * ```
+    * someJsonValue.decodeAs[User] // OK
+    * someJsonValue.decodeAs       // Wrong!
+    * ```
     */
   def decodeAs[A](using decoder: Decoder[A]): Option[A] =
     decoder.decode(this)
@@ -48,10 +48,10 @@ trait Encoder[-A]:
     *
     * For instance, given a `Encoder[String]`, we can get an `Encoder[UUID]`:
     *
-    * {{{
-    *   def uuidEncoder(given stringEncoder: Encoder[String]): Encoder[UUID] =
-    *     stringEncoder.transform[UUID](uuid => uuid.toString)
-    * }}}
+    * ```
+    * def uuidEncoder(given stringEncoder: Encoder[String]): Encoder[UUID] =
+    *   stringEncoder.transform[UUID](uuid => uuid.toString)
+    * ```
     *
     * This operation is also known as “contramap”.
     */
@@ -136,9 +136,7 @@ trait Decoder[+A]:
     * decoded value in case both succeed, or `None` if at least one failed.
     */
   def zip[B](that: Decoder[B]): Decoder[(A, B)] =
-    Decoder.fromFunction { json =>
-      this.decode(json).zip(that.decode(json))
-    }
+    Decoder.fromFunction(json => this.decode(json).zip(that.decode(json)))
 
   /** Transforms this `Decoder[A]` into a `Decoder[B]`, given a transformation
     * function from `A` to `B`.
@@ -233,7 +231,6 @@ object Contacts extends ContactsCodecs
 
 trait ContactsCodecs:
 
-  // TODO Define the encoder and the decoder for `Contacts`
   // The JSON representation of a value of type `Contacts` should be
   // a JSON object with a single field named “people” containing an
   // array of values of type `Person` (reuse the `Person` codecs)
