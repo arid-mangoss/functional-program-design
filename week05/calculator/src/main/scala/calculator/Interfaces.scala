@@ -3,7 +3,7 @@ package calculator
 // Interfaces used by the grading infrastructure. Do not change signatures
 // or your submission will fail with a NoSuchMethodError.
 
-trait TweetLengthInterface:
+trait TweetLengthInterface:  
   def MaxTweetLength: Int
   def tweetRemainingCharsCount(tweetText: Signal[String]): Signal[Int]
   def colorForRemainingCharsCount(remainingCharsCount: Signal[Int]): Signal[String]
